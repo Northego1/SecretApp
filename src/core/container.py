@@ -5,7 +5,6 @@ from core.database import DataBase
 from core.security import Security
 from core.uow import UnitOfWork
 from secret_app.application.container import ApplicationContainer
-from secret_app.infrastructure.container import InfrastructureContainer
 from secret_app.presentation.container import PresentationContainer
 
 
@@ -18,7 +17,6 @@ class Container(containers.DeclarativeContainer):
     db = providers.Singleton(DataBase, dsn=config.db.dsn)
     uow = providers.Singleton(UnitOfWork, db=db)
 
-    infrastructure_container = providers.Container(InfrastructureContainer)
 
     application_container = providers.Container(
         ApplicationContainer,

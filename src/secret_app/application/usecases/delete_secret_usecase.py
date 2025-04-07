@@ -3,10 +3,7 @@ from datetime import UTC, datetime
 from typing import Protocol
 
 from core.logger import get_logger
-from secret_app.application.dto import CreateSecretDto
 from secret_app.application.exceptions import (
-        SecretAlreadyReadError,
-        SecretExpiredError,
         SecretNotFoundError,
         SecretPassphraseError,
 )
@@ -80,7 +77,9 @@ class DeleteSecretUsecase:
                     action_type=ActionType.DELETE,
                     created_at=datetime.now(UTC),
                 )
-                await repo.secret_repository.delete_secret(secret_id)
+                log.info("Deleting secret with id: '%s'", secret_id)
                 await repo.secret_log_repository.create(secret_log)
-                log.info("Secret with id: '%s' deleted successfully", secret_id)
+                await repo.secret_repository.delete_secret(secret_id)
+
+
 

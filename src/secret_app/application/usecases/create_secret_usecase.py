@@ -12,7 +12,7 @@ log = get_logger(__name__)
 
 
 class SecretRepositoryProtocol(Protocol):
-        async def save_secret(self, secret: Secret) -> None: ...
+        async def create_secret(self, secret: Secret) -> None: ...
 
 class SecretLogRepositoryProtocol(Protocol):
         async def create(self, secret_log: SecretLog) -> None: ...
@@ -62,7 +62,7 @@ class CreateSecretUsecase:
             created_at=now,
         )
         async with self.uow.transaction() as repo:
-            await repo.secret_repository.save_secret(secret_domain)
+            await repo.secret_repository.create_secret(secret_domain)
             await repo.secret_log_repository.create(secret_log)
             log.info("CreateSecretUseCase executed successfully for secret_id: '%s'", new_secret_id)
             return CreateSecretDto(

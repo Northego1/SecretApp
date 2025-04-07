@@ -18,7 +18,7 @@ log = get_logger(__name__)
 
 class SecretRepositoryProtocol(Protocol):
         async def get_secret(self, secret_id: uuid.UUID) -> Secret | None: ...
-        async def save_secret(self, secret: Secret) -> None: ...
+        async def update_secret(self, secret: Secret) -> None: ...
 
 class SecretLogRepositoryProtocol(Protocol):
         async def create(self, secret_log: SecretLog) -> None: ...
@@ -32,7 +32,7 @@ class SecurityProtocol(Protocol):
 
 
 
-class ReadSecretUseCase:
+class GetSecretUsecase:
     def __init__(
             self,
             uow: UowProtocol[RepositoryProtocol],
@@ -41,7 +41,7 @@ class ReadSecretUseCase:
         self.uow = uow
         self.security = security
 
-    async def execute(self, secret_id: uuid.UUID) -> ReadSecretDto | None:
+    async def execute(self, secret_id: uuid.UUID) -> ReadSecretDto:
         log.debug("Executing ReadSecretUseCase for secret_id: '%s'", secret_id)
         async with self.uow.transaction() as repo:
             if not (secret := await repo.secret_repository.get_secret(secret_id)):
@@ -74,7 +74,7 @@ class ReadSecretUseCase:
             log.info("SecretLog created for secret_id: '%s'", secret_id)
 
             secret.is_readed = True
-            await repo.secret_repository.save_secret(secret)
+            await repo.secret_repository.update_secret(secret)
             log.info("Secret with id: '%s' marked as read", secret_id)
 
             decrypted_secret = self.security.decrypt(secret.secret)

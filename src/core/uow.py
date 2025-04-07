@@ -44,16 +44,17 @@ class UnitOfWork:
             await session.begin()
             try:
                 yield Repository(session)
+                log.debug("Commiting transaction")
                 await session.commit()
             except AppError as e:
                 log.exception(
-                    "AppError during transaction: %s", e.detail,
+                    "AppError during transaction: %s, rollback", e.detail,
                 )
                 await session.rollback()
                 raise e from e
             except Exception as e:
                 log.critical(
-                    "Unexpected error during transaction: %s", e, exc_info=True,
+                    "Unexpected error during transaction: %s, rollback", e, exc_info=True,
                 )
                 await session.rollback()
                 raise AppError from e

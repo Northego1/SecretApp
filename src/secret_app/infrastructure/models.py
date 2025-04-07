@@ -24,8 +24,8 @@ class SecretModel(Base):
     is_readed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     passphrase: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     ttl_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
-    created_at: Mapped[bytes] = mapped_column(
-        DateTime, nullable=False, default=datetime.now(UTC),
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.now(UTC),
     )
 
     secret_logs: Mapped["SecretLogModel"] = relationship(
@@ -36,15 +36,15 @@ class SecretModel(Base):
 class SecretLogModel(Base):
     __tablename__ = "secret_logs"
 
-    event_type: Mapped[ActionType] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
+    action_type: Mapped[ActionType] = mapped_column(
         SQLAlchemyEnum(ActionType, native_enum=False), nullable=False,
     )
-    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
     secret_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("secrets.id", ondelete="CASCADE"), nullable=False,
+        ForeignKey("secrets.id", ondelete="SET NULL"), nullable=True,
     )
-    created_at: Mapped[bytes] = mapped_column(
-        DateTime, nullable=False, default=datetime.now(UTC),
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.now(UTC),
     )
 
     secret: Mapped["SecretModel"] = relationship(

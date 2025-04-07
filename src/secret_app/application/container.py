@@ -4,7 +4,7 @@ from core.security import Security
 from core.uow import UnitOfWork
 from secret_app.application.usecases.create_secret_usecase import CreateSecretUsecase
 from secret_app.application.usecases.delete_secret_usecase import DeleteSecretUsecase
-from secret_app.application.usecases.read_secret_usecase import ReadSecretUseCase
+from secret_app.application.usecases.get_secret_usecase import GetSecretUsecase
 
 
 class ApplicationContainer(containers.DeclarativeContainer):
@@ -24,8 +24,8 @@ class ApplicationContainer(containers.DeclarativeContainer):
         uow=uow,
         security=security,
     )
-    get_secret_uc: providers.Factory[ReadSecretUseCase] = providers.Factory(
-        ReadSecretUseCase,
+    get_secret_uc: providers.Factory[GetSecretUsecase] = providers.Factory(
+        GetSecretUsecase,
         uow=uow,
         security=security,
     )
