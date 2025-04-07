@@ -12,11 +12,7 @@ class Secret:
     passphrase: bytes | None
     created_at: datetime
 
-
     def is_expired(self) -> bool:
         if self.ttl_seconds is None:
             return False
         return (datetime.now(UTC) - self.created_at).total_seconds() > self.ttl_seconds
-
-
-

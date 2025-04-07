@@ -5,9 +5,9 @@ from typing import Protocol
 from core.logger import get_logger
 from secret_app.application.dto import ReadSecretDto
 from secret_app.application.exceptions import (
-        SecretAlreadyReadError,
-        SecretExpiredError,
-        SecretNotFoundError,
+    SecretAlreadyReadError,
+    SecretExpiredError,
+    SecretNotFoundError,
 )
 from secret_app.application.uow_protocol import UowProtocol
 from secret_app.domain.secret import Secret
@@ -17,26 +17,28 @@ log = get_logger(__name__)
 
 
 class SecretRepositoryProtocol(Protocol):
-        async def get_secret(self, secret_id: uuid.UUID) -> Secret | None: ...
-        async def update_secret(self, secret: Secret) -> None: ...
+    async def get_secret(self, secret_id: uuid.UUID) -> Secret | None: ...
+    async def update_secret(self, secret: Secret) -> None: ...
+
 
 class SecretLogRepositoryProtocol(Protocol):
-        async def create(self, secret_log: SecretLog) -> None: ...
+    async def create(self, secret_log: SecretLog) -> None: ...
+
 
 class RepositoryProtocol(Protocol):
     secret_repository: SecretRepositoryProtocol
     secret_log_repository: SecretLogRepositoryProtocol
 
+
 class SecurityProtocol(Protocol):
     def decrypt(self, encrypted_data: bytes | str) -> str: ...
 
 
-
 class GetSecretUsecase:
     def __init__(
-            self,
-            uow: UowProtocol[RepositoryProtocol],
-            security: SecurityProtocol,
+        self,
+        uow: UowProtocol[RepositoryProtocol],
+        security: SecurityProtocol,
     ) -> None:
         self.uow = uow
         self.security = security
@@ -85,7 +87,3 @@ class GetSecretUsecase:
                 secret_id=secret.id,
                 secret=decrypted_secret,
             )
-
-
-
-

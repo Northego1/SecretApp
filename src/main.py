@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
 
     log.debug("initing dependency container")
     container = Container()
-    container.init_resources() # type: ignore
+    container.init_resources()  # type: ignore
 
     return app
 
@@ -26,4 +26,3 @@ app = create_app()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
-

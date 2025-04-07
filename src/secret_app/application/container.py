@@ -13,7 +13,6 @@ class ApplicationContainer(containers.DeclarativeContainer):
     security: providers.Dependency[Security] = providers.Dependency(instance_of=Security)
     uow: providers.Dependency[UnitOfWork] = providers.Dependency(instance_of=UnitOfWork)
 
-
     create_secret_uc: providers.Factory[CreateSecretUsecase] = providers.Factory(
         CreateSecretUsecase,
         uow=uow,
@@ -29,4 +28,3 @@ class ApplicationContainer(containers.DeclarativeContainer):
         uow=uow,
         security=security,
     )
-

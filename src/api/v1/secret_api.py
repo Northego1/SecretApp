@@ -16,9 +16,11 @@ router = APIRouter(
 @inject
 async def create_secret(
     requested_data: requests.SecretPostRequest,
-    create_secret_cl: proto.CreateSecretControllerProtocol = Depends(Provide[
-        Container.presentation_container.create_secret_cl # type: ignore
-    ]),
+    create_secret_cl: proto.CreateSecretControllerProtocol = Depends(
+        Provide[
+            Container.presentation_container.create_secret_cl  # type: ignore
+        ],
+    ),
 ) -> responses.SecretPostResponse:
     """
     Creates a new secret.
@@ -28,29 +30,33 @@ async def create_secret(
 
 
 @router.get(
-        "/{secret_key}", status_code=200, summary="Retrieve a secret",
-        responses={
-            404: {
-                "description": "Secret not found",
-                "model": responses.SecretNotFoundResponse,
-            },
-            410: {
-                "description": "Secret already read",
-                "model": responses.SecretAlreadyReadResponse,
-            },
-            403: {
-                "description": "Secret expired",
-                "model": responses.SecretExpiredResponse,
-            },
+    "/{secret_key}",
+    status_code=200,
+    summary="Retrieve a secret",
+    responses={
+        404: {
+            "description": "Secret not found",
+            "model": responses.SecretNotFoundResponse,
         },
+        410: {
+            "description": "Secret already read",
+            "model": responses.SecretAlreadyReadResponse,
+        },
+        403: {
+            "description": "Secret expired",
+            "model": responses.SecretExpiredResponse,
+        },
+    },
 )
 @inject
 async def get_secret(
     secret_key: UUID,
     response: Response,
-    get_secret_cl: proto.GetSecretControllerProtocol = Depends(Provide[
-        Container.presentation_container.get_secret_cl # type: ignore
-    ]),
+    get_secret_cl: proto.GetSecretControllerProtocol = Depends(
+        Provide[
+            Container.presentation_container.get_secret_cl  # type: ignore
+        ],
+    ),
 ) -> responses.SecretGetReponse:
     """
     Retrieves a secret by its key.
@@ -63,21 +69,25 @@ async def get_secret(
 
 
 @router.delete(
-        "/{secret_key}", status_code=204, summary="Delete a secret",
-        responses={
-            404: {
-                "description": "Secret not found",
-                "model": responses.SecretNotFoundResponse,
-            },
+    "/{secret_key}",
+    status_code=204,
+    summary="Delete a secret",
+    responses={
+        404: {
+            "description": "Secret not found",
+            "model": responses.SecretNotFoundResponse,
         },
+    },
 )
 @inject
 async def delete_secret(
     secret_key: UUID,
     requested_data: requests.SecretDeleteRequest,
-    delete_secret_cl: proto.DeleteSecretControllerProtocol = Depends(Provide[
-        Container.presentation_container.delete_secret_cl # type: ignore
-    ]),
+    delete_secret_cl: proto.DeleteSecretControllerProtocol = Depends(
+        Provide[
+            Container.presentation_container.delete_secret_cl  # type: ignore
+        ],
+    ),
 ) -> None:
     """
     Deletes a secret by its key.

@@ -12,15 +12,15 @@ class PresentationContainer(containers.DeclarativeContainer):
 
     create_secret_cl: providers.Factory[CreateSecretController] = providers.Factory(
         CreateSecretController,
-        application_container.create_secret_uc, # type: ignore
+        application_container.create_secret_uc,  # type: ignore
     )
 
     get_secret_cl: providers.Factory[GetSecretController] = providers.Factory(
         GetSecretController,
-        application_container.get_secret_uc, # type: ignore
+        application_container.get_secret_uc,  # type: ignore
     )
 
     delete_secret_cl: providers.Factory[DeleteSecretController] = providers.Factory(
         DeleteSecretController,
-        application_container.delete_secret_uc, # type: ignore
+        application_container.delete_secret_uc,  # type: ignore
     )

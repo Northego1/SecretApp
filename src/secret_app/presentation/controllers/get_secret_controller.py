@@ -12,18 +12,19 @@ log = get_logger(__name__)
 
 
 class GetSecretUsecaseProtocol(Protocol):
-        async def execute(self, secret_id: uuid.UUID) -> ReadSecretDto: ...
+    async def execute(self, secret_id: uuid.UUID) -> ReadSecretDto: ...
 
 
 class GetSecretController:
     def __init__(
-            self,
-            get_secret_uc: GetSecretUsecaseProtocol,
+        self,
+        get_secret_uc: GetSecretUsecaseProtocol,
     ) -> None:
         self.get_secret_uc = get_secret_uc
 
-
-    async def get_secret(self, secret_id: uuid.UUID, response: Response) -> responses.SecretGetReponse:
+    async def get_secret(
+        self, secret_id: uuid.UUID, response: Response,
+    ) -> responses.SecretGetReponse:
         try:
             log.debug("Calling get secret usecase")
             uc_response = await self.get_secret_uc.execute(

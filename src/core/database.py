@@ -18,7 +18,6 @@ class DataBase:
     #     async with self.engine.begin() as conn:
     #         yield conn
 
-
     async def session_maker(self: Self) -> AsyncGenerator[AsyncSession, None]:
         async with self.async_session_maker() as session:
             yield session

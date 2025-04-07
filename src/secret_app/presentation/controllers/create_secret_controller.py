@@ -9,25 +9,24 @@ from secret_app.presentation.schemas import requests, responses
 
 log = get_logger(__name__)
 
-class CreateSecretUsecaseProtocol(Protocol):
-        async def execute(
-            self,
-            secret: str,
-            ttl_seconds: int | None,
-            passphrase: str | None,
-    ) -> CreateSecretDto: ...
 
+class CreateSecretUsecaseProtocol(Protocol):
+    async def execute(
+        self,
+        secret: str,
+        ttl_seconds: int | None,
+        passphrase: str | None,
+    ) -> CreateSecretDto: ...
 
 
 class CreateSecretController:
     def __init__(self, create_usecase: CreateSecretUsecaseProtocol) -> None:
         self.create_usecase = create_usecase
 
-
     async def create_secret(
-            self,
-            create_request_data: requests.SecretPostRequest,
-        ) -> responses.SecretPostResponse:
+        self,
+        create_request_data: requests.SecretPostRequest,
+    ) -> responses.SecretPostResponse:
         try:
             log.debug("Calling create secret usecase")
             response_data = await self.create_usecase.execute(

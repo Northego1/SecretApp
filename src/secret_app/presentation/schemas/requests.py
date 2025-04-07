@@ -8,7 +8,3 @@ class SecretDeleteRequest(BaseModel):
 class SecretPostRequest(SecretDeleteRequest):
     secret: str = Field(examples=["Some secret text"])
     ttl_seconds: int = Field(ge=1, examples=[180])
-
-
-
-

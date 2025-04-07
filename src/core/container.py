@@ -13,10 +13,18 @@ class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(packages=["api.v1"])
 
-    security = providers.Singleton(Security, secret_key=config.sec_app.CRYPTO_KEY)
-    db = providers.Singleton(DataBase, dsn=config.db.dsn)
-    uow = providers.Singleton(UnitOfWork, db=db)
-
+    security: providers.Singleton[Security] = providers.Singleton(
+        Security,
+        secret_key=config.sec_app.CRYPTO_KEY,
+    )
+    db: providers.Singleton[DataBase] = providers.Singleton(
+        DataBase,
+        dsn=config.db.dsn,
+    )
+    uow: providers.Singleton[UnitOfWork] = providers.Singleton(
+        UnitOfWork,
+        db=db,
+    )
 
     application_container = providers.Container(
         ApplicationContainer,
@@ -28,4 +36,3 @@ class Container(containers.DeclarativeContainer):
         PresentationContainer,
         application_container=application_container,
     )
-

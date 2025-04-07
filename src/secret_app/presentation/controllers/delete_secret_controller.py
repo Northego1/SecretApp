@@ -12,24 +12,23 @@ log = get_logger(__name__)
 
 class DeleteSecretUsecaseProtocol(Protocol):
     async def execute(
-            self,
-            secret_id: uuid.UUID,
-            passphrase: str | None,
+        self,
+        secret_id: uuid.UUID,
+        passphrase: str | None,
     ) -> None: ...
 
 
 class DeleteSecretController:
     def __init__(
-            self,
-            delete_secret_uc: DeleteSecretUsecaseProtocol,
+        self,
+        delete_secret_uc: DeleteSecretUsecaseProtocol,
     ) -> None:
         self.delete_secret_uc = delete_secret_uc
 
-
     async def delete_secret(
-            self,
-            secret_id: uuid.UUID,
-            requested_data: requests.SecretDeleteRequest,
+        self,
+        secret_id: uuid.UUID,
+        requested_data: requests.SecretDeleteRequest,
     ) -> None:
         try:
             log.debug("Calling delete secret usecase")

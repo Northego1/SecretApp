@@ -25,11 +25,14 @@ class SecretModel(Base):
     passphrase: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     ttl_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, default=datetime.now(UTC),
+        DateTime(timezone=True),
+        nullable=False,
+        default=datetime.now(UTC),
     )
 
     secret_logs: Mapped["SecretLogModel"] = relationship(
-        "secret_app.infrastructure.models.SecretLogModel", back_populates="secret",
+        "secret_app.infrastructure.models.SecretLogModel",
+        back_populates="secret",
     )
 
 
@@ -38,15 +41,20 @@ class SecretLogModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
     action_type: Mapped[ActionType] = mapped_column(
-        SQLAlchemyEnum(ActionType, native_enum=False), nullable=False,
+        SQLAlchemyEnum(ActionType, native_enum=False),
+        nullable=False,
     )
     secret_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("secrets.id", ondelete="SET NULL"), nullable=True,
+        ForeignKey("secrets.id", ondelete="SET NULL"),
+        nullable=True,
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, default=datetime.now(UTC),
+        DateTime(timezone=True),
+        nullable=False,
+        default=datetime.now(UTC),
     )
 
     secret: Mapped["SecretModel"] = relationship(
-        "secret_app.infrastructure.models.SecretModel", back_populates="secret_logs",
+        "secret_app.infrastructure.models.SecretModel",
+        back_populates="secret_logs",
     )

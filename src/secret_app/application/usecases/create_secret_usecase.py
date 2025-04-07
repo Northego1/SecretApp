@@ -12,34 +12,37 @@ log = get_logger(__name__)
 
 
 class SecretRepositoryProtocol(Protocol):
-        async def create_secret(self, secret: Secret) -> None: ...
+    async def create_secret(self, secret: Secret) -> None: ...
+
 
 class SecretLogRepositoryProtocol(Protocol):
-        async def create(self, secret_log: SecretLog) -> None: ...
+    async def create(self, secret_log: SecretLog) -> None: ...
+
 
 class RepositoryProtocol(Protocol):
     secret_repository: SecretRepositoryProtocol
     secret_log_repository: SecretLogRepositoryProtocol
 
+
 class SecurityProtocol(Protocol):
     def encrypt(self, data: str | bytes) -> bytes: ...
     def encrypt_passphrase(self, passphrase: str) -> bytes: ...
 
+
 class CreateSecretUsecase:
     def __init__(
-            self,
-            uow: UowProtocol[RepositoryProtocol],
-            security: SecurityProtocol,
+        self,
+        uow: UowProtocol[RepositoryProtocol],
+        security: SecurityProtocol,
     ) -> None:
         self.uow = uow
         self.security = security
 
-
     async def execute(
-            self,
-            secret: str,
-            ttl_seconds: int | None,
-            passphrase: str | None,
+        self,
+        secret: str,
+        ttl_seconds: int | None,
+        passphrase: str | None,
     ) -> CreateSecretDto:
         log.info("Executing CreateSecretUsecase")
         new_secret_id = uuid.uuid4()

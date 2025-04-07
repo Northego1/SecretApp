@@ -10,13 +10,3 @@ class CreateSecretDto:
 @dataclass(slots=True)
 class ReadSecretDto(CreateSecretDto):
     secret: str
-
-
-# @dataclass(slots=True)
-# class CreateSecretDto:
-#     secret: str
-#     ttl: int | None
-#     passphrase: str | None
-
-
-
