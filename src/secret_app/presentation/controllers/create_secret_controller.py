@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 
 from core.exceptions import AppError
 from core.logger import get_logger
@@ -23,9 +23,11 @@ class CreateSecretController:
     def __init__(self, create_usecase: CreateSecretUsecaseProtocol) -> None:
         self.create_usecase = create_usecase
 
+
     async def create_secret(
         self,
         create_request_data: requests.SecretPostRequest,
+        response: Response,
     ) -> responses.SecretPostResponse:
         try:
             log.debug("Calling create secret usecase")
@@ -34,6 +36,9 @@ class CreateSecretController:
                 ttl_seconds=create_request_data.ttl_seconds,
                 passphrase=create_request_data.passphrase,
             )
+            response.headers["Cache-Control"] = "no-store"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
             return responses.SecretPostResponse(secret_key=response_data.secret_id)
         except AppError as e:
             log.debug("Returing error response with status code: %s", e.status_code)

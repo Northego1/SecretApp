@@ -2,6 +2,7 @@ from dependency_injector import containers, providers
 
 from core.config import config
 from core.database import DataBase
+from core.redis import RedisClient
 from core.security import Security
 from core.uow import UnitOfWork
 from secret_app.application.container import ApplicationContainer
@@ -13,6 +14,10 @@ class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(packages=["api.v1"])
 
+    redis: providers.Singleton[RedisClient] = providers.Singleton(
+        RedisClient,
+        redis_dsn=config.redis.dsn,
+    )
     security: providers.Singleton[Security] = providers.Singleton(
         Security,
         secret_key=config.sec_app.CRYPTO_KEY,

@@ -41,6 +41,7 @@ class DeleteSecretUsecase:
         self.uow = uow
         self.security = security
 
+
     async def execute(
         self,
         secret_id: uuid.UUID,

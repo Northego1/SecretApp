@@ -5,8 +5,6 @@ from typing import Protocol
 from core.logger import get_logger
 from secret_app.application.dto import ReadSecretDto
 from secret_app.application.exceptions import (
-    SecretAlreadyReadError,
-    SecretExpiredError,
     SecretNotFoundError,
 )
 from secret_app.application.uow_protocol import UowProtocol
@@ -43,6 +41,7 @@ class GetSecretUsecase:
         self.uow = uow
         self.security = security
 
+
     async def execute(self, secret_id: uuid.UUID) -> ReadSecretDto:
         log.debug("Executing ReadSecretUseCase for secret_id: '%s'", secret_id)
         async with self.uow.transaction() as repo:
@@ -52,18 +51,7 @@ class GetSecretUsecase:
                     status_code=404,
                     detail=f"Secret with id: {secret_id!r} not found",
                 )
-            if secret.is_readed:
-                log.warning("Secret with id: '%s' has already been read", secret_id)
-                raise SecretAlreadyReadError(
-                    status_code=400,
-                    detail=f"Secret with id: {secret_id!r} has already been read",
-                )
-            if secret.is_expired():
-                log.warning("Secret with id: '%s' has expired", secret_id)
-                raise SecretExpiredError(
-                    status_code=410,
-                    detail=f"Secret with id: {secret_id!r} has expired",
-                )
+            secret_data = secret.reveal()
             log.info("Secret with id: '%s' retrieved successfully", secret_id)
 
             secret_log = SecretLog(
@@ -75,11 +63,11 @@ class GetSecretUsecase:
             await repo.secret_log_repository.create(secret_log)
             log.info("SecretLog created for secret_id: '%s'", secret_id)
 
-            secret.is_readed = True
+            secret.is_read = True
             await repo.secret_repository.update_secret(secret)
             log.info("Secret with id: '%s' marked as read", secret_id)
 
-            decrypted_secret = self.security.decrypt(secret.secret)
+            decrypted_secret = self.security.decrypt(secret_data)
             log.debug("Secret with id: '%s' decrypted successfully", secret_id)
 
             log.info("ReadSecretUseCase executed successfully for secret_id: '%s'", secret_id)

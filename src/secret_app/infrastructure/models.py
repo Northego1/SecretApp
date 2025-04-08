@@ -21,7 +21,7 @@ class SecretModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
     secret: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    is_readed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_read: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     passphrase: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     ttl_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(

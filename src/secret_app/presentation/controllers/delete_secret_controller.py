@@ -25,6 +25,7 @@ class DeleteSecretController:
     ) -> None:
         self.delete_secret_uc = delete_secret_uc
 
+
     async def delete_secret(
         self,
         secret_id: uuid.UUID,

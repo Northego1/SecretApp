@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import DataBase
 from core.exceptions import AppError
 from core.logger import get_logger
+from core.redis import RedisClient
 from secret_app.infrastructure.repository.secret_logs_repository import SecretLogRepository
 from secret_app.infrastructure.repository.secret_repository import SecretRepository
 

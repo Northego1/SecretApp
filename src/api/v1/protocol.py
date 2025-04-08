@@ -10,6 +10,7 @@ class CreateSecretControllerProtocol(Protocol):
     async def create_secret(
         self,
         create_request_data: requests.SecretPostRequest,
+        response: Response,
     ) -> responses.SecretPostResponse: ...
 
 

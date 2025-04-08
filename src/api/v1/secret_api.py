@@ -16,6 +16,7 @@ router = APIRouter(
 @inject
 async def create_secret(
     requested_data: requests.SecretPostRequest,
+    response: Response,
     create_secret_cl: proto.CreateSecretControllerProtocol = Depends(
         Provide[
             Container.presentation_container.create_secret_cl  # type: ignore
@@ -26,7 +27,10 @@ async def create_secret(
     Creates a new secret.
     This endpoint allows the user to create and securely store a new secret.
     """
-    return await create_secret_cl.create_secret(requested_data)
+    return await create_secret_cl.create_secret(
+        create_request_data=requested_data,
+        response=response,
+    )
 
 
 @router.get(

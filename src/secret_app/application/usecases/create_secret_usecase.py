@@ -38,6 +38,7 @@ class CreateSecretUsecase:
         self.uow = uow
         self.security = security
 
+
     async def execute(
         self,
         secret: str,
@@ -53,7 +54,7 @@ class CreateSecretUsecase:
             id=new_secret_id,
             secret=self.security.encrypt(secret),
             ttl_seconds=ttl_seconds,
-            is_readed=False,
+            is_read=False,
             passphrase=self.security.encrypt_passphrase(passphrase) if passphrase else None,
             created_at=now,
         )

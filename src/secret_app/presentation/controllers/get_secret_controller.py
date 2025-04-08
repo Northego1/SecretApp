@@ -22,6 +22,7 @@ class GetSecretController:
     ) -> None:
         self.get_secret_uc = get_secret_uc
 
+
     async def get_secret(
         self, secret_id: uuid.UUID, response: Response,
     ) -> responses.SecretGetReponse:

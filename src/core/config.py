@@ -14,7 +14,7 @@ class BaseConfig(BaseSettings):
     )
 
 
-class DBSettings(BaseConfig):
+class PostgresSettings(BaseConfig):
     """Database configuration settings."""
 
     DB_USER: str
@@ -31,7 +31,18 @@ class DBSettings(BaseConfig):
         )
 
 
-class SecretApp(BaseConfig):
+class RedisSettings(BaseConfig):
+    """Redis configuration settings."""
+
+    REDIS_HOST: str
+    REDIS_PORT: str
+
+    @property
+    def dsn(self) -> str:
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
+
+
+class SecretAppSettings(BaseConfig):
     """Secret application configuration settings."""
 
     CRYPTO_KEY: str
@@ -40,8 +51,9 @@ class SecretApp(BaseConfig):
 class Config:
     """Application configuration settings."""
 
-    db = DBSettings()  # type: ignore
-    sec_app = SecretApp()  # type: ignore
+    db = PostgresSettings()  # type: ignore
+    sec_app = SecretAppSettings()  # type: ignore
+    redis = RedisSettings()  # type: ignore
 
 
 config = Config()

@@ -11,6 +11,7 @@ class SecretLogRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
+
     async def create(self, secret_log: SecretLog) -> None:
         secret_log_model = SecretLogModel(
             id=secret_log.id,
