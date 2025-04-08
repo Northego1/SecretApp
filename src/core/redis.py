@@ -10,7 +10,7 @@ class RedisClient:
             redis_dsn: str,
     ) -> None:
         self._redis_dsn = redis_dsn
-        self.redis: Redis | None = None
+        self.redis: Redis
 
 
     async def connect(self) -> None:

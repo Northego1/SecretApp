@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+from typing import TYPE_CHECKING, AsyncGenerator
 
 import uvicorn
 from fastapi import FastAPI
@@ -7,13 +7,15 @@ from fastapi import FastAPI
 from api.v1 import union_router
 from core.container import Container
 from core.logger import get_logger
-from core.redis import RedisClient
+
+if TYPE_CHECKING:
+    from core.redis import RedisClient
 
 log = get_logger(__name__)
 
 @asynccontextmanager
 async def _lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    redis_client: RedisClient = app.state.container.redis()
+    redis_client: RedisClient = app.state.container.redis_client()
     await redis_client.connect()
     yield
     await redis_client.disconnect()

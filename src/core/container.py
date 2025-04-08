@@ -14,7 +14,7 @@ class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(packages=["api.v1"])
 
-    redis: providers.Singleton[RedisClient] = providers.Singleton(
+    redis_client: providers.Singleton[RedisClient] = providers.Singleton(
         RedisClient,
         redis_dsn=config.redis.dsn,
     )
@@ -29,6 +29,7 @@ class Container(containers.DeclarativeContainer):
     uow: providers.Singleton[UnitOfWork] = providers.Singleton(
         UnitOfWork,
         db=db,
+        redis_client=redis_client,
     )
 
     application_container = providers.Container(

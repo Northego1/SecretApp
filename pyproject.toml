@@ -11,14 +11,15 @@ dependencies = [
     "cryptography>=44.0.2",
     "dependency-injector>=4.46.0",
     "fastapi>=0.115.12",
+    "gunicorn>=23.0.0",
     "mypy>=1.15.0",
     "pydantic>=2.11.2",
     "pydantic-settings>=2.8.1",
+    "redis>=5.2.1",
     "ruff>=0.11.4",
     "sqlalchemy>=2.0.40",
     "uvicorn>=0.34.0",
 ]
-
 
 [tool.ruff]
 line-length = 100  
@@ -36,14 +37,12 @@ ignore = [
     "PGH003", "INP001"
 ]  
 
-
 [tool.mypy]
 files = "src/"
 ignore_missing_imports = true
 exclude = [
     "alembic/.*",
 ]
-
 
 [tool.pylint]
 disable = ["C0115", "C0114", "C0116", "E0401"]

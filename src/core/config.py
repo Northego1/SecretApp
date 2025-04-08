@@ -46,6 +46,7 @@ class SecretAppSettings(BaseConfig):
     """Secret application configuration settings."""
 
     CRYPTO_KEY: str
+    CACHING_SEC_TTL_SEC: int = 60 * 5
 
 
 class Config:
